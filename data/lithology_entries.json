@@ -1,0 +1,38 @@
+[
+  {
+    "tab_name": "2010_M-7_83.pdf",
+    "title": "2010 M-7 Lithology (1983)",
+    "description": "Lithology section for the 2010 M-7 well captured in 1983.",
+    "pdf_filename": "2010_M-7_83.pdf"
+  },
+  {
+    "tab_name": "10340_V-16_78.pdf",
+    "title": "10340 V-16 Lithology (1978)",
+    "description": "Lithological interpretation for well 10340 V-16 from 1978.",
+    "pdf_filename": "10340_V-16_78.pdf"
+  },
+  {
+    "tab_name": "27241_SEG-2_00.pdf",
+    "title": "27241 SEG-2 Lithology (2000)",
+    "description": "Lithology log and section details for 27241 SEG-2 compiled in 2000.",
+    "pdf_filename": "27241_SEG-2_00.pdf"
+  },
+  {
+    "tab_name": "R-2_22.pdf",
+    "title": "R-2 Lithology (1922)",
+    "description": "Lithology data for the R-2 well with 1922 survey information.",
+    "pdf_filename": "R-2_22.pdf"
+  },
+  {
+    "tab_name": "1955_VO-12_83.pdf",
+    "title": "1955 VO-12 Lithology (1983)",
+    "description": "Lithology notes for 1955 VO-12 compiled in 1983.",
+    "pdf_filename": "1955_VO-12_83.pdf"
+  },
+  {
+    "tab_name": "6187_G-5_86.pdf",
+    "title": "6187 G-5 Lithology (1986)",
+    "description": "Lithological summary for 6187 G-5 recorded in 1986.",
+    "pdf_filename": "6187_G-5_86.pdf"
+  }
+]

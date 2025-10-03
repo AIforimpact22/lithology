@@ -3,25 +3,144 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Lithology Library</title>
+    <title>Ai For Impact · Lithology Library</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
   </head>
-  <body>
-    <main class="container">
-      <header>
-        <h1>Lithology Sections</h1>
-        <p class="lead">
-          Explore lithology sections from the repository. Select a record to view
-          the corresponding PDF document.
-        </p>
-      </header>
+  <body class="with-cover">
+    <header class="site-nav" role="navigation" aria-label="Primary">
+      <div class="container">
+        <div class="nav-row">
+          <div class="brand-wrap">
+            <a class="brand-link" href="{{ url_for('index') }}">
+              <img
+                class="brand-logo"
+                src="https://cdn.jsdelivr.net/gh/ai-for-impact/brand@main/logo-square.png"
+                alt="Ai For Impact logo"
+                width="80"
+                height="80"
+                decoding="async"
+                loading="eager"
+                fetchpriority="high"
+              />
+              <span class="brand-text">Ai For Impact</span>
+            </a>
+          </div>
 
-      <section aria-live="polite" id="status" class="status">
-        Loading lithology entries…
+          <nav class="nav-actions" aria-label="Pages">
+            <a class="nav-pill" href="{{ url_for('index') }}" data-active="true" aria-current="page">Home</a>
+            <a class="nav-pill" href="#library">Library</a>
+            <a class="nav-pill" href="#workflow">Workflow</a>
+            <a class="nav-pill" href="mailto:connect@aiforimpact.net">Contact</a>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <section class="cover-hero" aria-labelledby="hero-title">
+      <div
+        class="bg"
+        style="background-image: radial-gradient(circle at top right, rgba(92, 169, 255, 0.32), transparent 55%), radial-gradient(circle at bottom left, rgba(139, 224, 135, 0.24), transparent 50%), linear-gradient(135deg, #0d1423 0%, #06070b 100%);"
+      ></div>
+      <div class="overlay" aria-hidden="true"></div>
+      <div class="inner">
+        <div class="hero-pill">Lithology Library</div>
+        <h1 id="hero-title">Structured lithology insights for faster decisions</h1>
+        <p class="subhead">
+          Browse curated borehole sections extracted from our Geological Profiles workbook.
+          Each PDF is paired with tabular lithology intervals so you can jump straight into
+          interpretation.
+        </p>
+        <div class="hero-actions">
+          <a class="btn" href="#library">Explore the library</a>
+          <a class="btn ghost" href="#workflow">Learn the workflow</a>
+        </div>
+      </div>
+    </section>
+
+    <main class="container">
+      <section class="section-card" id="library" aria-labelledby="library-title">
+        <div class="banner">
+          <h2 id="library-title">Latest lithology sections</h2>
+          <p class="muted">
+            PDF scans are automatically matched with interval tables from <em>Geological Profiles.xlsx</em>.
+          </p>
+        </div>
+        <div class="body">
+          <div class="card data-card">
+            <section aria-live="polite" id="status" class="status">
+              Loading lithology entries…
+            </section>
+          </div>
+          <section id="entries" class="entries" hidden aria-labelledby="library-title"></section>
+        </div>
       </section>
 
-      <section id="entries" class="entries" hidden></section>
+      <section class="section-card" id="workflow" aria-labelledby="workflow-title">
+        <div class="banner">
+          <h2 id="workflow-title">How the workflow comes together</h2>
+          <p class="muted">
+            The process below mirrors the data pipeline powering this viewer.
+          </p>
+        </div>
+        <div class="body">
+          <div class="steps-grid">
+            <article class="step-card">
+              <div class="step-head">
+                <span class="step-num">01</span>
+                <span class="step-title">Collect geological PDFs</span>
+              </div>
+              <p class="step-text">
+                Gather source lithology documents and store them in the repository alongside the
+                Excel workbook reference.
+              </p>
+            </article>
+            <article class="step-card">
+              <div class="step-head">
+                <span class="step-num">02</span>
+                <span class="step-title">Parse workbook intervals</span>
+              </div>
+              <p class="step-text">
+                The Flask backend reads <code>Geological Profiles.xlsx</code>, extracting interval depths and
+                descriptions for each tab.
+              </p>
+            </article>
+            <article class="step-card">
+              <div class="step-head">
+                <span class="step-num">03</span>
+                <span class="step-title">Merge PDFs & tables</span>
+              </div>
+              <p class="step-text">
+                Each entry is matched to its lithology table so you can move from the PDF to structured
+                data instantly.
+              </p>
+            </article>
+            <article class="step-card">
+              <div class="step-head">
+                <span class="step-num">04</span>
+                <span class="step-title">Deliver insights</span>
+              </div>
+              <p class="step-text">
+                The front-end renders rich cards with download links and inline tables for quick
+                comparison across boreholes.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
     </main>
+
+    <footer class="site-footer" role="contentinfo" aria-label="Site footer">
+      <div class="container footer-layout">
+        <div class="footer-copy">
+          <p class="footer-text">
+            <strong>Need a bespoke lithology workflow?</strong>
+            &nbsp;—&nbsp;
+            <a href="mailto:connect@aiforimpact.net">connect@aiforimpact.net</a>
+          </p>
+        </div>
+        <div class="footer-note">Crafted by the Ai For Impact data team.</div>
+      </div>
+    </footer>
 
     <script src="{{ url_for('static', filename='app.js') }}" defer></script>
   </body>

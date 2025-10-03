@@ -414,7 +414,7 @@ body.with-cover .cover-hero {
   box-shadow: 0 10px 24px rgba(92, 169, 255, 0.3);
 }
 
-.section-table__title {
+.lithology-log__title {
   margin: 0;
   font-size: 15px;
   letter-spacing: 0.2px;
@@ -422,78 +422,147 @@ body.with-cover .cover-hero {
   text-transform: uppercase;
 }
 
-.section-table__wrapper {
-  overflow-x: auto;
+.lithology-log {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.lithology-log__empty {
+  margin: 0;
+  padding: 16px;
   border-radius: 14px;
-  border: 1px solid rgba(92, 169, 255, 0.12);
-  background: rgba(6, 9, 16, 0.86);
+  border: 1px dashed rgba(92, 169, 255, 0.28);
+  background: rgba(6, 9, 16, 0.72);
+  color: var(--muted);
+  font-style: italic;
 }
 
-.section-table {
-  width: 100%;
-  min-width: 360px;
-  border-collapse: collapse;
-  color: var(--ink);
-}
-
-.section-table thead {
-  background: rgba(92, 169, 255, 0.12);
-  color: var(--accent-strong);
-}
-
-.section-table th,
-.section-table td {
-  padding: 12px 16px;
-  text-align: left;
-  font-size: 14px;
-}
-
-.section-table th {
+.lithology-log__header {
+  display: grid;
+  grid-template-columns: minmax(120px, 160px) minmax(120px, 170px) 1fr;
+  gap: 18px;
+  font-size: 12px;
   font-weight: 700;
-  letter-spacing: 0.2px;
+  letter-spacing: 0.28px;
+  text-transform: uppercase;
+  color: var(--muted);
 }
 
-.section-table th:nth-child(3) {
-  text-align: center;
+.lithology-log__content {
+  display: grid;
+  grid-template-columns: minmax(120px, 160px) minmax(120px, 170px) 1fr;
+  gap: 18px;
+  align-items: stretch;
+  min-height: 320px;
 }
 
-.section-table__symbol-cell {
-  width: 72px;
-  text-align: center;
+.lithology-log__depth,
+.lithology-log__column,
+.lithology-log__descriptions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 320px;
 }
 
-.section-table__symbol-swatch {
-  --symbol-color: #6b7280;
-  width: 28px;
-  height: 28px;
-  margin: 0 auto;
-  border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  background: var(--symbol-color);
-  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.2);
-  transition: transform 0.18s ease;
+.lithology-log__interval {
+  --interval-size: 1;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex: var(--interval-size) 1 0;
+  border-radius: 12px;
+  overflow: hidden;
+  background: rgba(6, 9, 16, 0.8);
+  border: 1px solid rgba(92, 169, 255, 0.14);
+  padding: 14px 16px;
 }
 
-.section-table__symbol-swatch:hover,
-.section-table__symbol-swatch:focus-visible {
-  transform: translateY(-1px);
-}
-
-.section-table td:nth-child(1),
-.section-table td:nth-child(2) {
-  white-space: nowrap;
+.lithology-log__interval--depth {
+  justify-content: space-between;
   font-variant-numeric: tabular-nums;
   color: #d4dcf3;
+  background: rgba(6, 9, 16, 0.7);
 }
 
-.section-table tbody tr:nth-child(even) {
-  background: rgba(92, 169, 255, 0.06);
+.lithology-log__depth-value {
+  font-size: 13px;
+  letter-spacing: 0.18px;
 }
 
-.section-table__empty {
-  text-align: center;
-  font-style: italic;
-  color: var(--muted);
+.lithology-log__depth-value--from {
+  align-self: flex-start;
+  font-weight: 600;
+}
+
+.lithology-log__depth-value--to {
+  align-self: flex-end;
+  color: rgba(226, 233, 255, 0.78);
+}
+
+.lithology-log__interval--column {
+  padding: 0;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.18);
+}
+
+.lithology-log__interval--column::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--symbol-color, #6b7280);
+  opacity: 0.82;
+}
+
+.lithology-log__symbol-label {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(6, 9, 16, 0.82);
+  color: #f4f6ff;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.32px;
+  text-transform: uppercase;
+  box-shadow: 0 18px 40px rgba(5, 10, 20, 0.38);
+}
+
+.lithology-log__interval--description {
+  align-items: flex-start;
+  background: rgba(6, 9, 16, 0.82);
+}
+
+.lithology-log__text {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #e2e9ff;
+}
+
+@media (max-width: 780px) {
+  .lithology-log__header,
+  .lithology-log__content {
+    grid-template-columns: 1fr;
+  }
+
+  .lithology-log__content {
+    min-height: auto;
+  }
+
+  .lithology-log__depth,
+  .lithology-log__column,
+  .lithology-log__descriptions {
+    min-height: auto;
+  }
 }
 
 /* ---------- Workflow cards ---------- */

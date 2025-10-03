@@ -75,126 +75,65 @@ function formatDepth(value) {
   return text;
 }
 
-function parseDepthValue(value) {
-  if (value === null || value === undefined) {
-    return null;
-  }
-
-  const text = value.toString().trim();
-  if (!text) {
-    return null;
-  }
-
-  const normalized = text.replace(',', '.');
-  const numericValue = Number(normalized);
-  return Number.isFinite(numericValue) ? numericValue : null;
-}
-
-function computeIntervalSize(fromValue, toValue) {
-  if (Number.isFinite(fromValue) && Number.isFinite(toValue)) {
-    const thickness = toValue - fromValue;
-    if (thickness > 0) {
-      return thickness;
-    }
-
-    if (thickness === 0) {
-      return 0.5;
-    }
-  }
-
-  return 1;
-}
-
 function createLithologyLog(sections) {
   const wrapper = document.createElement('div');
-  wrapper.className = 'lithology-log';
+  wrapper.className = 'lithology-table';
 
   if (!sections.length) {
     const empty = document.createElement('p');
-    empty.className = 'lithology-log__empty';
+    empty.className = 'lithology-table__empty';
     empty.textContent = 'No lithological section data is available in the workbook.';
     wrapper.appendChild(empty);
     return wrapper;
   }
 
-  const header = document.createElement('div');
-  header.className = 'lithology-log__header';
-  ['Depth', 'Lithology', 'Description'].forEach((label) => {
-    const span = document.createElement('span');
-    span.textContent = label;
-    header.appendChild(span);
+  const tableWrapper = document.createElement('div');
+  tableWrapper.className = 'lithology-table__wrapper';
+
+  const table = document.createElement('table');
+  table.className = 'lithology-table__table';
+
+  const head = document.createElement('thead');
+  const headerRow = document.createElement('tr');
+  ['From (m)', 'To (m)', 'Lithology', 'Description'].forEach((label) => {
+    const cell = document.createElement('th');
+    cell.textContent = label;
+    headerRow.appendChild(cell);
   });
+  head.appendChild(headerRow);
 
-  const content = document.createElement('div');
-  content.className = 'lithology-log__content';
+  const body = document.createElement('tbody');
+  sections.forEach((section) => {
+    const symbol = inferLithologySymbol(section.description);
+    const row = document.createElement('tr');
 
-  const rows = document.createElement('div');
-  rows.className = 'lithology-log__rows';
+    const fromCell = document.createElement('td');
+    fromCell.textContent = formatDepth(section.from_depth);
+    row.appendChild(fromCell);
 
-  const intervals = sections.map((section) => {
-    const fromValue = parseDepthValue(section.from_depth);
-    const toValue = parseDepthValue(section.to_depth);
+    const toCell = document.createElement('td');
+    toCell.textContent = formatDepth(section.to_depth);
+    row.appendChild(toCell);
 
-    return {
-      ...section,
-      fromValue,
-      toValue,
-      size: computeIntervalSize(fromValue, toValue),
-    };
-  });
-
-  const totalSize = intervals.reduce((sum, interval) => sum + interval.size, 0) || sections.length;
-
-  intervals.forEach((interval) => {
-    const symbol = inferLithologySymbol(interval.description);
-
-    const row = document.createElement('div');
-    row.className = 'lithology-log__row';
-    row.style.setProperty('--interval-size', interval.size / totalSize);
-
-    const depthCell = document.createElement('div');
-    depthCell.className = 'lithology-log__cell lithology-log__cell--depth';
-
-    const fromLabel = document.createElement('span');
-    fromLabel.className = 'lithology-log__depth-value lithology-log__depth-value--from';
-    fromLabel.textContent = formatDepth(interval.from_depth);
-    depthCell.appendChild(fromLabel);
-
-    const toLabel = document.createElement('span');
-    toLabel.className = 'lithology-log__depth-value lithology-log__depth-value--to';
-    toLabel.textContent = formatDepth(interval.to_depth);
-    depthCell.appendChild(toLabel);
-
-    row.appendChild(depthCell);
-
-    const symbolCell = document.createElement('div');
-    symbolCell.className = 'lithology-log__cell lithology-log__cell--symbol';
-
-    const symbolLabel = document.createElement('span');
-    symbolLabel.className = 'lithology-log__symbol-label';
-    symbolLabel.textContent = symbol.label;
-    symbolLabel.style.setProperty('--symbol-color', symbol.color);
-    symbolCell.appendChild(symbolLabel);
-
+    const symbolCell = document.createElement('td');
+    const chip = document.createElement('span');
+    chip.className = 'lithology-table__chip';
+    chip.textContent = symbol.label;
+    chip.style.setProperty('--chip-color', symbol.color);
+    symbolCell.appendChild(chip);
     row.appendChild(symbolCell);
 
-    const descriptionCell = document.createElement('div');
-    descriptionCell.className = 'lithology-log__cell lithology-log__cell--description';
-
-    const descriptionText = document.createElement('p');
-    descriptionText.className = 'lithology-log__text';
-    descriptionText.textContent = interval.description;
-    descriptionCell.appendChild(descriptionText);
-
+    const descriptionCell = document.createElement('td');
+    descriptionCell.textContent = section.description;
     row.appendChild(descriptionCell);
 
-    rows.appendChild(row);
+    body.appendChild(row);
   });
 
-  content.appendChild(rows);
-
-  wrapper.appendChild(header);
-  wrapper.appendChild(content);
+  table.appendChild(head);
+  table.appendChild(body);
+  tableWrapper.appendChild(table);
+  wrapper.appendChild(tableWrapper);
 
   return wrapper;
 }
@@ -228,8 +167,8 @@ function createEntryCard(entry) {
   link.rel = 'noopener noreferrer';
 
   const logTitle = document.createElement('h3');
-  logTitle.className = 'lithology-log__title';
-  logTitle.textContent = 'Lithology log';
+  logTitle.className = 'lithology-table__title';
+  logTitle.textContent = 'Lithology intervals';
 
   const sections = Array.isArray(entry.sections) ? entry.sections : [];
   const log = createLithologyLog(sections);
@@ -253,7 +192,7 @@ async function loadLithology() {
     const payload = await response.json();
     if (!Array.isArray(payload) || payload.length === 0) {
       statusElement.classList.remove('success', 'error');
-      statusElement.textContent = 'No lithology logs are available yet.';
+      statusElement.textContent = 'No lithology entries are available yet.';
       statusElement.classList.add('empty');
       entriesContainer.hidden = true;
       return;
@@ -278,7 +217,7 @@ async function loadLithology() {
 
     if (entries.length === 0) {
       statusElement.classList.remove('success', 'error');
-      statusElement.textContent = 'No lithology logs with interval data are available yet.';
+      statusElement.textContent = 'No lithology tables with interval data are available yet.';
       statusElement.classList.add('empty');
       entriesContainer.hidden = true;
       return;
@@ -290,13 +229,13 @@ async function loadLithology() {
       entriesContainer.appendChild(card);
     });
 
-    const logLabel = entries.length === 1 ? 'log' : 'logs';
-    statusElement.textContent = `${entries.length} ${logLabel} with lithological data loaded.`;
+    const entryLabel = entries.length === 1 ? 'entry' : 'entries';
+    statusElement.textContent = `${entries.length} ${entryLabel} with lithological tables loaded.`;
     statusElement.classList.add('success');
     entriesContainer.hidden = false;
   } catch (error) {
     statusElement.classList.remove('success', 'empty');
-    statusElement.textContent = `Error loading lithology sections: ${error.message}`;
+    statusElement.textContent = `Error loading lithology tables: ${error.message}`;
     statusElement.classList.add('error');
   }
 }

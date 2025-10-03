@@ -414,7 +414,7 @@ body.with-cover .cover-hero {
   box-shadow: 0 10px 24px rgba(92, 169, 255, 0.3);
 }
 
-.lithology-log__title {
+.lithology-table__title {
   margin: 0;
   font-size: 15px;
   letter-spacing: 0.2px;
@@ -422,13 +422,13 @@ body.with-cover .cover-hero {
   text-transform: uppercase;
 }
 
-.lithology-log {
+.lithology-table {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
 }
 
-.lithology-log__empty {
+.lithology-table__empty {
   margin: 0;
   padding: 16px;
   border-radius: 14px;
@@ -438,170 +438,88 @@ body.with-cover .cover-hero {
   font-style: italic;
 }
 
-.lithology-log__header {
-  display: grid;
-  grid-template-columns: minmax(120px, 160px) minmax(120px, 170px) 1fr;
-  gap: 18px;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.28px;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-
-.lithology-log__content {
-  display: flex;
-  flex-direction: column;
-  min-height: 320px;
-}
-
-.lithology-log__rows {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  min-height: inherit;
-}
-
-.lithology-log__row {
-  --interval-size: 1;
-  position: relative;
-  display: grid;
-  grid-template-columns: minmax(120px, 160px) minmax(120px, 170px) 1fr;
-  gap: 18px;
-  padding: 16px 18px;
-  border-radius: 14px;
-  background: rgba(6, 9, 16, 0.82);
-  border: 1px solid rgba(92, 169, 255, 0.14);
+.lithology-table__wrapper {
+  border-radius: 16px;
+  border: 1px solid rgba(92, 169, 255, 0.18);
+  background: rgba(6, 9, 16, 0.72);
   box-shadow: 0 16px 40px rgba(5, 10, 20, 0.24);
-  flex: var(--interval-size) 1 0;
-  overflow: hidden;
+  overflow-x: auto;
 }
 
-.lithology-log__row::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-      to right,
-      rgba(92, 169, 255, 0.06),
-      transparent 32%,
-      transparent 68%,
-      rgba(92, 169, 255, 0.06)
-    );
-  opacity: 0.8;
-  pointer-events: none;
-}
-
-.lithology-log__row:nth-child(even) {
-  background: rgba(6, 12, 24, 0.82);
-}
-
-.lithology-log__row:nth-child(even)::after {
-  background: linear-gradient(
-      to right,
-      rgba(92, 169, 255, 0.1),
-      transparent 32%,
-      transparent 68%,
-      rgba(92, 169, 255, 0.1)
-    );
-}
-
-.lithology-log__cell {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 8px;
-}
-
-.lithology-log__cell--depth {
-  justify-content: space-between;
-  font-variant-numeric: tabular-nums;
-  color: #d4dcf3;
-}
-
-.lithology-log__depth-value {
-  font-size: 13px;
-  letter-spacing: 0.18px;
-}
-
-.lithology-log__depth-value--from {
-  align-self: flex-start;
-  font-weight: 600;
-}
-
-.lithology-log__depth-value--to {
-  align-self: flex-end;
-  color: rgba(226, 233, 255, 0.78);
-}
-
-.lithology-log__cell--symbol {
-  align-items: center;
-}
-
-.lithology-log__symbol-label {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 10px 16px;
-  border-radius: 999px;
-  color: #f4f6ff;
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.32px;
-  text-transform: uppercase;
-  box-shadow: 0 18px 40px rgba(5, 10, 20, 0.38);
-}
-
-.lithology-log__symbol-label::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: var(--symbol-color, #6b7280);
-  opacity: 0.82;
-  z-index: -1;
-}
-
-.lithology-log__cell--description {
-  align-items: flex-start;
-  background: rgba(6, 9, 16, 0.75);
-  padding: 12px 14px;
-  border-radius: 12px;
-  border: 1px solid rgba(92, 169, 255, 0.12);
-}
-
-.lithology-log__text {
-  margin: 0;
+.lithology-table__table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 520px;
   font-size: 14px;
   line-height: 1.5;
   color: #e2e9ff;
 }
 
+.lithology-table__table thead {
+  background: rgba(92, 169, 255, 0.14);
+  color: #d4dcf3;
+  text-transform: uppercase;
+  letter-spacing: 0.24px;
+  font-size: 12px;
+}
+
+.lithology-table__table th,
+.lithology-table__table td {
+  padding: 14px 18px;
+  text-align: left;
+  border-bottom: 1px solid rgba(92, 169, 255, 0.12);
+}
+
+.lithology-table__table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.lithology-table__table tbody tr:nth-child(even) {
+  background: rgba(6, 12, 24, 0.55);
+}
+
+.lithology-table__table tbody tr:nth-child(odd) {
+  background: rgba(6, 9, 16, 0.55);
+}
+
+.lithology-table__table td:nth-child(1),
+.lithology-table__table td:nth-child(2) {
+  width: 120px;
+  font-variant-numeric: tabular-nums;
+}
+
+.lithology-table__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #f4f6ff;
+  background: rgba(92, 169, 255, 0.12);
+  border: 1px solid rgba(92, 169, 255, 0.2);
+  white-space: nowrap;
+}
+
+.lithology-table__chip::before {
+  content: '';
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--chip-color, #6b7280);
+  box-shadow: 0 0 0 3px rgba(92, 169, 255, 0.12);
+}
+
 @media (max-width: 780px) {
-  .lithology-log__header {
-    grid-template-columns: 1fr;
-    gap: 6px;
+  .lithology-table__table {
+    font-size: 13px;
+    min-width: 100%;
   }
 
-  .lithology-log__content {
-    min-height: auto;
-  }
-
-  .lithology-log__rows {
-    gap: 10px;
-  }
-
-  .lithology-log__row {
-    grid-template-columns: 1fr;
-    gap: 12px;
-    padding: 14px;
-  }
-
-  .lithology-log__cell--description {
-    width: 100%;
+  .lithology-table__table th,
+  .lithology-table__table td {
+    padding: 12px 14px;
   }
 }
 

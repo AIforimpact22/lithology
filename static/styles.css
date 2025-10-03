@@ -67,7 +67,7 @@ body.with-cover header.site-nav {
 .nav-row {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: 12px;
   min-height: var(--nav-h);
 }
@@ -299,6 +299,12 @@ body.with-cover .cover-hero {
   margin: 6px 0 0;
 }
 
+.library-note {
+  margin: 12px 0 0;
+  font-weight: 600;
+  color: var(--accent-strong);
+}
+
 /* ---------- Status + entries ---------- */
 .status {
   margin: 0;
@@ -332,6 +338,7 @@ body.with-cover .cover-hero {
 .entries {
   display: grid;
   gap: clamp(18px, 2.4vw, 28px);
+  grid-template-columns: 1fr;
 }
 
 .entries[hidden] {
@@ -564,16 +571,6 @@ footer.site-footer {
   .btn.ghost {
     width: 100%;
     justify-content: center;
-  }
-
-  .entries {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (min-width: 721px) {
-  .entries {
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   }
 }
 

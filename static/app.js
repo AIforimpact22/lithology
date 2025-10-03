@@ -1,6 +1,59 @@
 const statusElement = document.getElementById('status');
 const entriesContainer = document.getElementById('entries');
 
+const LITHOLOGY_SYMBOLS = [
+  {
+    keywords: ['glina', 'glinast', 'glinena'],
+    label: 'Clay',
+    color: '#b07a4a',
+  },
+  {
+    keywords: ['pesek', 'pešč', 'peščena'],
+    label: 'Sand',
+    color: '#d5a651',
+  },
+  {
+    keywords: ['melj', 'meljast'],
+    label: 'Silt',
+    color: '#c0bb7c',
+  },
+  {
+    keywords: ['prod', 'prodn'],
+    label: 'Gravel',
+    color: '#8e7458',
+  },
+  {
+    keywords: ['organska', 'humus', 'šota', 'šotni'],
+    label: 'Organic material',
+    color: '#4f6a3f',
+  },
+  {
+    keywords: ['lapor', 'laporov'],
+    label: 'Marl',
+    color: '#6f7f99',
+  },
+];
+
+const DEFAULT_LITHOLOGY_SYMBOL = {
+  label: 'Unknown lithology',
+  color: '#6b7280',
+};
+
+function inferLithologySymbol(description) {
+  const text = (description || '').toString().toLowerCase();
+  if (!text) {
+    return DEFAULT_LITHOLOGY_SYMBOL;
+  }
+
+  for (const symbol of LITHOLOGY_SYMBOLS) {
+    if (symbol.keywords.some((keyword) => text.includes(keyword))) {
+      return symbol;
+    }
+  }
+
+  return DEFAULT_LITHOLOGY_SYMBOL;
+}
+
 function formatDepth(value) {
   if (value === null || value === undefined) {
     return '—';
@@ -31,7 +84,7 @@ function createSectionTable(sections) {
 
   const thead = document.createElement('thead');
   const headerRow = document.createElement('tr');
-  ['From (m)', 'To (m)', 'Description'].forEach((label) => {
+  ['From (m)', 'To (m)', 'Symbol', 'Description'].forEach((label) => {
     const th = document.createElement('th');
     th.scope = 'col';
     th.textContent = label;
@@ -43,7 +96,7 @@ function createSectionTable(sections) {
   if (!sections.length) {
     const emptyRow = document.createElement('tr');
     const emptyCell = document.createElement('td');
-    emptyCell.colSpan = 3;
+    emptyCell.colSpan = 4;
     emptyCell.className = 'section-table__empty';
     emptyCell.textContent = 'No lithological section data is available in the workbook.';
     emptyRow.appendChild(emptyCell);
@@ -59,6 +112,19 @@ function createSectionTable(sections) {
       const toCell = document.createElement('td');
       toCell.textContent = formatDepth(section.to_depth);
       row.appendChild(toCell);
+
+      const symbolCell = document.createElement('td');
+      symbolCell.className = 'section-table__symbol-cell';
+      const symbol = inferLithologySymbol(section.description);
+      const swatch = document.createElement('div');
+      swatch.className = 'section-table__symbol-swatch';
+      swatch.style.setProperty('--symbol-color', symbol.color);
+      swatch.title = symbol.label;
+      swatch.setAttribute('role', 'img');
+      swatch.setAttribute('aria-label', symbol.label);
+      swatch.tabIndex = 0;
+      symbolCell.appendChild(swatch);
+      row.appendChild(symbolCell);
 
       const descriptionCell = document.createElement('td');
       descriptionCell.textContent = section.description;

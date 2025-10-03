@@ -128,14 +128,8 @@ function createLithologyLog(sections) {
   const content = document.createElement('div');
   content.className = 'lithology-log__content';
 
-  const depthColumn = document.createElement('div');
-  depthColumn.className = 'lithology-log__depth';
-
-  const symbolColumn = document.createElement('div');
-  symbolColumn.className = 'lithology-log__column';
-
-  const descriptionColumn = document.createElement('div');
-  descriptionColumn.className = 'lithology-log__descriptions';
+  const rows = document.createElement('div');
+  rows.className = 'lithology-log__rows';
 
   const intervals = sections.map((section) => {
     const fromValue = parseDepthValue(section.from_depth);
@@ -154,49 +148,50 @@ function createLithologyLog(sections) {
   intervals.forEach((interval) => {
     const symbol = inferLithologySymbol(interval.description);
 
-    const depthItem = document.createElement('div');
-    depthItem.className = 'lithology-log__interval lithology-log__interval--depth';
-    depthItem.style.setProperty('--interval-size', interval.size / totalSize);
+    const row = document.createElement('div');
+    row.className = 'lithology-log__row';
+    row.style.setProperty('--interval-size', interval.size / totalSize);
+
+    const depthCell = document.createElement('div');
+    depthCell.className = 'lithology-log__cell lithology-log__cell--depth';
 
     const fromLabel = document.createElement('span');
     fromLabel.className = 'lithology-log__depth-value lithology-log__depth-value--from';
     fromLabel.textContent = formatDepth(interval.from_depth);
-    depthItem.appendChild(fromLabel);
+    depthCell.appendChild(fromLabel);
 
     const toLabel = document.createElement('span');
     toLabel.className = 'lithology-log__depth-value lithology-log__depth-value--to';
     toLabel.textContent = formatDepth(interval.to_depth);
-    depthItem.appendChild(toLabel);
+    depthCell.appendChild(toLabel);
 
-    depthColumn.appendChild(depthItem);
+    row.appendChild(depthCell);
 
-    const columnItem = document.createElement('div');
-    columnItem.className = 'lithology-log__interval lithology-log__interval--column';
-    columnItem.style.setProperty('--interval-size', interval.size / totalSize);
-    columnItem.style.setProperty('--symbol-color', symbol.color);
+    const symbolCell = document.createElement('div');
+    symbolCell.className = 'lithology-log__cell lithology-log__cell--symbol';
 
-    const columnLabel = document.createElement('span');
-    columnLabel.className = 'lithology-log__symbol-label';
-    columnLabel.textContent = symbol.label;
-    columnItem.appendChild(columnLabel);
+    const symbolLabel = document.createElement('span');
+    symbolLabel.className = 'lithology-log__symbol-label';
+    symbolLabel.textContent = symbol.label;
+    symbolLabel.style.setProperty('--symbol-color', symbol.color);
+    symbolCell.appendChild(symbolLabel);
 
-    symbolColumn.appendChild(columnItem);
+    row.appendChild(symbolCell);
 
-    const descriptionItem = document.createElement('div');
-    descriptionItem.className = 'lithology-log__interval lithology-log__interval--description';
-    descriptionItem.style.setProperty('--interval-size', interval.size / totalSize);
+    const descriptionCell = document.createElement('div');
+    descriptionCell.className = 'lithology-log__cell lithology-log__cell--description';
 
     const descriptionText = document.createElement('p');
     descriptionText.className = 'lithology-log__text';
     descriptionText.textContent = interval.description;
-    descriptionItem.appendChild(descriptionText);
+    descriptionCell.appendChild(descriptionText);
 
-    descriptionColumn.appendChild(descriptionItem);
+    row.appendChild(descriptionCell);
+
+    rows.appendChild(row);
   });
 
-  content.appendChild(depthColumn);
-  content.appendChild(symbolColumn);
-  content.appendChild(descriptionColumn);
+  content.appendChild(rows);
 
   wrapper.appendChild(header);
   wrapper.appendChild(content);

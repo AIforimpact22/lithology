@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Lithology Library</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+  </head>
+  <body>
+    <main class="container">
+      <header>
+        <h1>Lithology Sections</h1>
+        <p class="lead">
+          Explore lithology sections from the repository. Select a record to view
+          the corresponding PDF document.
+        </p>
+      </header>
+
+      <section aria-live="polite" id="status" class="status">
+        Loading lithology entries…
+      </section>
+
+      <section class="table-wrapper" hidden>
+        <table id="lithology-table">
+          <thead>
+            <tr>
+              <th scope="col">Tab Name</th>
+              <th scope="col">Title</th>
+              <th scope="col">Description</th>
+              <th scope="col">PDF</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
+    </main>
+
+    <script src="{{ url_for('static', filename='app.js') }}" defer></script>
+  </body>
+</html>

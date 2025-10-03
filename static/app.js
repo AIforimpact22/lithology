@@ -126,10 +126,10 @@ async function loadLithology() {
       throw new Error(`Server responded with status ${response.status}`);
     }
 
-    const entries = await response.json();
-    if (!Array.isArray(entries) || entries.length === 0) {
+    const payload = await response.json();
+    if (!Array.isArray(payload) || payload.length === 0) {
       statusElement.classList.remove('success', 'error');
-      statusElement.textContent = 'No lithology sections are available yet.';
+      statusElement.textContent = 'No lithology logs are available yet.';
       statusElement.classList.add('empty');
       entriesContainer.hidden = true;
       return;
@@ -137,23 +137,37 @@ async function loadLithology() {
 
     statusElement.classList.remove('empty', 'error', 'success');
 
+    const entries = payload
+      .map((entry) => ({
+        ...entry,
+        sections: Array.isArray(entry.sections)
+          ? entry.sections.filter((section) =>
+              Boolean(
+                (section.description || '').toString().trim() ||
+                  section.from_depth ||
+                  section.to_depth,
+              ),
+            )
+          : [],
+      }))
+      .filter((entry) => entry.sections.length > 0);
+
+    if (entries.length === 0) {
+      statusElement.classList.remove('success', 'error');
+      statusElement.textContent = 'No lithology logs with interval data are available yet.';
+      statusElement.classList.add('empty');
+      entriesContainer.hidden = true;
+      return;
+    }
+
     entriesContainer.innerHTML = '';
     entries.forEach((entry) => {
       const card = createEntryCard(entry);
       entriesContainer.appendChild(card);
     });
 
-    const sectionsWithData = entries.filter(
-      (entry) => Array.isArray(entry.sections) && entry.sections.length > 0,
-    ).length;
-
-    const pdfLabel = entries.length === 1 ? 'PDF' : 'PDFs';
-    const tableLabel =
-      sectionsWithData === 1
-        ? 'lithological section table'
-        : 'lithological section tables';
-
-    statusElement.textContent = `${entries.length} ${pdfLabel} loaded with ${sectionsWithData} ${tableLabel}.`;
+    const logLabel = entries.length === 1 ? 'log' : 'logs';
+    statusElement.textContent = `${entries.length} ${logLabel} with lithological data loaded.`;
     statusElement.classList.add('success');
     entriesContainer.hidden = false;
   } catch (error) {
